@@ -10,7 +10,7 @@ display_height = 600
 
 AppleThickness = 20
 block_size = 20
-FPS = 20
+FPS = 10
 
 direction = "right"
 

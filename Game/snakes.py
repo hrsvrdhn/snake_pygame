@@ -214,7 +214,7 @@ def game_loop():
 			snakeLength += 1
 
 		# 30 FRAMES PER SECOND
-		clock.tick(FPS)
+		clock.tick(FPS + snakeLength*0.2)
 
 	pygame.quit()
 	quit()
