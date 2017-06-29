@@ -1,7 +1,7 @@
 import pygame
 import time
 import random
-from apple_generator import randAppleGeneration
+from apple_generator import randAppleGeneration,randgoldGeneration
 from settings import *
 # IS IMPORTANT
 pygame.init()
@@ -10,7 +10,7 @@ pygame.init()
 
 img = pygame.image.load('images/snake_head.png')
 appleimg = pygame.image.load('images/apple.png')
-
+goldimg = pygame.image.load('images/gold.jpg')
 
 # pygame.display.flip() 
 # pygame.display.update()
@@ -121,18 +121,22 @@ def game_loop():
 
 	snakelist = []
 	snakeLength = 1
+	current_score = 0
 
 	lead_x_change = 0
 	lead_y_change = 0
 	is_highscore = False
 	randAppleX,randAppleY = randAppleGeneration()
+	randGoldX,randGoldY = randgoldGeneration()
+	while randGoldX == randAppleX and randGoldY == randAppleY:
+		randGoldX,randGoldY = randgoldGeneration()
 
 	while not gameExit:
 
 		while gameOver == True:
 			gameDisplay.fill(white)
 			message_to_screen("Game Over", red, -100, "large")
-			message_to_screen("Your Score :" + str(snakeLength-1), red, 0 , "medium")
+			message_to_screen("Your Score :" + str(current_score), red, 0 , "medium")
 			message_to_screen(" Press C to play again or Q to quit ",black, 50, "medium")
 			pygame.display.update()
 			for event in pygame.event.get():
@@ -175,12 +179,10 @@ def game_loop():
 				file = open("highscore.txt",'r')
 				HighScore = int(file.read())
 				file.close()
-				print HighScore
-				if snakeLength-1>HighScore:
-					is_highscore = True
-				file = open("highscore.txt",'w')
-				file.write(str(snakeLength-1))
-				file.close()
+				if current_score>HighScore:
+					file = open("highscore.txt",'w')
+					file.write(str(current_score))
+					file.close()
 			except:
 				pass
 
@@ -191,6 +193,7 @@ def game_loop():
 
 		# pygame.draw.rect(gameDisplay, red, [randAppleX,randAppleY,AppleThickness,AppleThickness])
 		gameDisplay.blit(appleimg, (randAppleX,randAppleY))
+		gameDisplay.blit(goldimg, (randGoldX,randGoldY))
 
 		snakeHead = []
 		snakeHead.append(lead_x)
@@ -205,13 +208,23 @@ def game_loop():
 				gameOver = True
 
 		snake(block_size, snakelist)
-		score(snakeLength-1)
+		score(current_score)
 
 		pygame.display.update()
 
 		if lead_x == randAppleX and lead_y == randAppleY:
 			randAppleX,randAppleY = randAppleGeneration()
+			while randGoldX == randAppleX and randGoldY == randAppleY:
+				randAppleX,randAppleY = randAppleGeneration()
 			snakeLength += 1
+			current_score += 1
+
+		if lead_x == randGoldX and lead_y == randGoldY:
+			randGoldX,randGoldY = randgoldGeneration()
+			while randGoldX == randAppleX and randGoldY == randAppleY:
+				randGoldX,randGoldY = randgoldGeneration()
+			current_score += 5
+
 
 		# 30 FRAMES PER SECOND
 		clock.tick(FPS + snakeLength*0.2)
