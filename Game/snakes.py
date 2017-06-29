@@ -209,6 +209,22 @@ def game_loop():
 
 		snake(block_size, snakelist)
 		score(current_score)
+		seconds=(pygame.time.get_ticks()-start_ticks)/1000
+		
+		if (seconds<3):
+			seconds=(pygame.time.get_ticks()-start_ticks)/1000
+			if lead_x == randGoldX and lead_y == randGoldY:
+				randGoldX,randGoldY = randgoldGeneration()
+				start_ticks = pygame.time.get_ticks()	
+				while randGoldX == randAppleX and randGoldY == randAppleY:
+					randGoldX,randGoldY = randgoldGeneration()
+				current_score += 5
+			gameDisplay.blit(goldimg, (randGoldX,randGoldY))
+		if seconds == 3:
+			start_ticks = pygame.time.get_ticks()	
+			randGoldX,randGoldY = randgoldGeneration()
+			while randGoldX == randAppleX and randGoldY == randAppleY:
+					randGoldX,randGoldY = randgoldGeneration()
 
 		pygame.display.update()
 
@@ -218,24 +234,6 @@ def game_loop():
 				randAppleX,randAppleY = randAppleGeneration()
 			snakeLength += 1
 			current_score += 1
-		
-		seconds=(pygame.time.get_ticks()-start_ticks)/1000
-		
-		if (seconds<5):
-			seconds=(pygame.time.get_ticks()-start_ticks)/1000
-			if lead_x == randGoldX and lead_y == randGoldY:
-				randGoldX,randGoldY = randgoldGeneration()
-				while randGoldX == randAppleX and randGoldY == randAppleY:
-					randGoldX,randGoldY = randgoldGeneration()
-				current_score += 5
-			gameDisplay.blit(goldimg, (randGoldX,randGoldY))
-			pygame.display.update()
-		if seconds == 5:
-			start_ticks = pygame.time.get_ticks()	
-			randGoldX,randGoldY = randgoldGeneration()
-			while randGoldX == randAppleX and randGoldY == randAppleY:
-					randGoldX,randGoldY = randgoldGeneration()
-
 
 		# 30 FRAMES PER SECOND
 		clock.tick(FPS + snakeLength*0.2)
