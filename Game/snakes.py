@@ -126,6 +126,7 @@ def game_loop():
 	lead_x_change = 0
 	lead_y_change = 0
 	is_highscore = False
+	start_ticks=pygame.time.get_ticks()	
 	randAppleX,randAppleY = randAppleGeneration()
 	randGoldX,randGoldY = randgoldGeneration()
 	while randGoldX == randAppleX and randGoldY == randAppleY:
@@ -193,7 +194,6 @@ def game_loop():
 
 		# pygame.draw.rect(gameDisplay, red, [randAppleX,randAppleY,AppleThickness,AppleThickness])
 		gameDisplay.blit(appleimg, (randAppleX,randAppleY))
-		gameDisplay.blit(goldimg, (randGoldX,randGoldY))
 
 		snakeHead = []
 		snakeHead.append(lead_x)
@@ -218,12 +218,23 @@ def game_loop():
 				randAppleX,randAppleY = randAppleGeneration()
 			snakeLength += 1
 			current_score += 1
-
-		if lead_x == randGoldX and lead_y == randGoldY:
+		
+		seconds=(pygame.time.get_ticks()-start_ticks)/1000
+		
+		if (seconds<5):
+			seconds=(pygame.time.get_ticks()-start_ticks)/1000
+			if lead_x == randGoldX and lead_y == randGoldY:
+				randGoldX,randGoldY = randgoldGeneration()
+				while randGoldX == randAppleX and randGoldY == randAppleY:
+					randGoldX,randGoldY = randgoldGeneration()
+				current_score += 5
+			gameDisplay.blit(goldimg, (randGoldX,randGoldY))
+			pygame.display.update()
+		if seconds == 5:
+			start_ticks = pygame.time.get_ticks()	
 			randGoldX,randGoldY = randgoldGeneration()
 			while randGoldX == randAppleX and randGoldY == randAppleY:
-				randGoldX,randGoldY = randgoldGeneration()
-			current_score += 5
+					randGoldX,randGoldY = randgoldGeneration()
 
 
 		# 30 FRAMES PER SECOND
