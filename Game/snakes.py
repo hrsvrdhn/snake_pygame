@@ -60,7 +60,7 @@ def game_intro():
 		gameDisplay.fill(white)
 
 		message_to_screen("Welcome to SnakeLand", green, -100, "large")
-		message_to_screen("The objective of the game is to eat red apples", black, 0)
+		message_to_screen("The objective of the game is to eat apples", black, 0)
 		message_to_screen("The more you eat , the longer you get", black, 30)
 		message_to_screen("If you run into yourself, or the edges, you die !", black, 60)
 		message_to_screen("Press C to start,P to Pause,  Q to Quit", black, 90)
@@ -136,7 +136,7 @@ def game_loop():
 
 		while gameOver == True:
 			gameDisplay.fill(white)
-			message_to_screen("Game Over", red, -100, "large")
+			message_to_screen("Game Over!", red, -100, "large")
 			message_to_screen("Your Score :" + str(current_score), red, 0 , "medium")
 			message_to_screen(" Press C to play again or Q to quit ",black, 50, "medium")
 			pygame.display.update()
